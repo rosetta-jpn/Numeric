@@ -3,12 +3,11 @@
 #include "Matrix.h"
 #include <iostream>
 #include <vector>
-#define EPS 1e-8
-#define DEBUG std::cerr << "DEBUG" << __LINE__ << "\n";
+#define CG_EPS 1e-8
 
-bool isfinish(Matrix &r){
+bool cg_isfinish(Matrix &r){
   for(int i = 0 ; i < r.row;i++){
-    if(r.matrix[i][0] > EPS){
+    if(r.matrix[i][0] > CG_EPS){
       return false;
     }
   }
@@ -49,7 +48,7 @@ std::vector <double> ConjugateGradient(Matrix &A,std::vector <double> &_b,bool f
   double alpha;
   double beta;
 
-  while(!isfinish(r)){
+  while(!cg_isfinish(r)){
     alpha = (r.t() * r).matrix[0][0] / (p.t() * A * p).matrix[0][0];
     r_ = r - (alpha * A * p);
     x = x + alpha * p;
