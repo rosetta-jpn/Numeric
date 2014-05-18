@@ -18,5 +18,5 @@
 * EigenValue : QR法などの固有値問題の解法(C++)
 * Mersenne_Twister : メルセンヌ・ツイスター(Python)
 * PartialDiffentialEquation : 有名な偏微分方程式を解くプログラム(Python)
-* Eigen
+
 
