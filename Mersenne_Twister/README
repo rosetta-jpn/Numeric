@@ -1,0 +1,15 @@
+get_32() generates unsigned 32-bit integers.
+get_31() generates unsigned 31-bit integers.
+get_real1() generates uniform real in [0,1] (32-bit resolution). 
+get_real2() generates uniform real in [0,1) (32-bit resolution). 
+get_real3() generates uniform real in (0,1) (32-bit resolution).
+get_res53() is not implemnted
+
+How to use : example.py
+
+Refference
+M. Matsumoto and T. Nishimura,
+"Mersenne Twister: A 623-Dimensionally Equidistributed Uniform  
+Pseudo-Random Number Generator",
+ACM Transactions on Modeling and Computer Simulation,
+Vol. 8, No. 1, January 1998, pp 3--30.
