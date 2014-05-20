@@ -14,6 +14,8 @@
 
 詳細は各ディレクトリのREADMEを読んでください。
 
+* Matrix : いくつかのディレクトリでヘッダファイルとして呼び出しているMatrix.hの最新バージョンです(C++)
+
 * ConjugateGradient : 共役勾配法(CG法)を中心とした連立方程式の解法を集めています(C++)
 * EigenValue : QR法などの固有値問題の解法(C++)
 * Mersenne_Twister : メルセンヌ・ツイスター(Python)
