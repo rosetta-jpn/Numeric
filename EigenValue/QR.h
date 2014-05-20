@@ -6,9 +6,8 @@
 #include <cmath>
 #include "Matrix.h"
 #define QR_EPS 1e-9
-#define DEBUG std::cerr << "DEBUG" << __LINE__ << "\n";
 
-bool isfinish(std::vector <double> r,std::vector <double> r_){
+bool QRisfinish(std::vector <double> r,std::vector <double> r_){
   for(int i = 0; i < r.size();i++){
     if(std::abs(r[i]-r_[i]) > QR_EPS){
       return false;
@@ -18,7 +17,7 @@ bool isfinish(std::vector <double> r,std::vector <double> r_){
 }
 
 std::pair <Matrix,Matrix> QR_decomp(Matrix& A){//Householder transformation
-  if(!(A.row > A.column)){
+  if(!(A.row >= A.column)){
     std::cerr << "row size <= column size\n";
     exit(-1);
   }
@@ -37,8 +36,14 @@ std::pair <Matrix,Matrix> QR_decomp(Matrix& A){//Householder transformation
       x_len += x[i-k] * x[i-k];
     }
     x_len = std::sqrt(x_len);
+    if(x_len == 0){
+      x_len += QR_EPS;//if x_len = 0 ||x-y|| = 0 -> u is nan so x_len == 0 -> x_len = QR_EPS
+    }
     u[0] = x[0] + x_len;
     u_len = u[0] * u[0];
+    if(u_len < QR_EPS){
+      u_len = QR_EPS;//if u_len = 0 ||x-y|| = 0 -> u is nan so u_len == 0 -> u_len = QR_EPS
+    }
     for(int i = 1;i < R.row-k;i++){
       u[i] = x[i];//x - y y = 0(i != 0)
       u_len += u[i] * u[i];
@@ -55,6 +60,7 @@ std::pair <Matrix,Matrix> QR_decomp(Matrix& A){//Householder transformation
         R.matrix[i][j] = R.matrix[i][j] - 2 * u[i-k] * ut_R[j-k] / u_len;
       }
     }
+
     for(int i = 0;i < Q.row;i++){
       for(int j = k; j < Q.column;j++){
         Q_u[i] += Q.matrix[i][j] * u[j-k];
@@ -65,6 +71,7 @@ std::pair <Matrix,Matrix> QR_decomp(Matrix& A){//Householder transformation
         Q.matrix[i][j] = Q.matrix[i][j] - 2 * Q_u[i] * u[j-k] / u_len;
       }
     }
+
   }
  
   return std::make_pair(Q,R);
@@ -84,7 +91,7 @@ std::vector <double> QR_method(Matrix A){
     for(int i = 0;i < A.row;i++){
       r[i] = A.matrix[i][i];
     }
-  }while(!isfinish(r,r_));
+  }while(!QRisfinish(r,r_));
   return r;
 }
 #endif
