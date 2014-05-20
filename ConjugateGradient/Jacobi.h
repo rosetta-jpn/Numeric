@@ -26,17 +26,7 @@ if(!A.isSuperdiagonalAngle()){
   
   std::vector <double> x(A.row,0);
   std::vector <double> x_(A.row,0);
-  for(int i = 0;i < A.row;i++){
-    double ax = 0;
-    for(int j = 0; j < A.column;j++){
-      if(i != j){
-        ax += A.matrix[i][j] * x_[j];
-      }
-    }
-    x[i] = (b[i] - ax) / A.matrix[i][i];
-  }
-  
-  while(!jacobi_isfinish(x,x_)){
+  do{
     std::swap(x,x_);
     for(int i = 0;i < A.row;i++){
       double ax = 0;
@@ -47,7 +37,8 @@ if(!A.isSuperdiagonalAngle()){
       }
       x[i] = (b[i] - ax) / A.matrix[i][i];
     }
-  }
+  }while(!jacobi_isfinish(x,x_));
+
   return x;
 }
 std::vector <double> Jacobi_method(Matrix &A,std::vector <double> b){
