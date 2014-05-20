@@ -4,6 +4,7 @@
 #include "GaussianElimination.h"
 #include "CG.h"
 #include "Jacobi.h"
+#include "SOR.h"
 using namespace std;
 
 int main(){
@@ -11,7 +12,7 @@ int main(){
   ios_base::sync_with_stdio(0);
   Matrix A({{3,1,1},{1,3,1},{1,1,3}});
   vector <double> b = {0,4,6};
-  auto x = Jacobi_method(A,b);
+  auto x = SOR_method(A,b);
   for(auto a :x){
     cout << a << " ";
   }
