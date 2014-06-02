@@ -12,6 +12,7 @@ class Matrix{
   std::vector <std::vector <double> > matrix;
   int column;
   int row;
+  Matrix();
   Matrix(int n,int m){
     matrix = std::vector <std::vector <double> > (n,std::vector <double>(m,0));
     row = n;
@@ -22,7 +23,6 @@ class Matrix{
     row = A.size();
     column = A[0].size();
   }
-  
   void Identity(){
     for(int i = 0; i < std::max(this->row,this->column);i++){
       this->matrix[i][i] = 1;
@@ -88,36 +88,40 @@ class Matrix{
     return *this;
   }
   
-  Matrix operator*(const Matrix &A){
+  Matrix operator*(Matrix &A){
     int n = this->row;
     int m = this->column;
     int l = A.column;
     if(this->column != A.row){
       Matrix_calc_error(*this,A,"mul");
     }
+    Matrix A_t(A.column,A.row);
+    A_t = A.t();
     Matrix ret(n,l);
     for(int i = 0; i < n;i++){
       for(int j = 0; j < l;j++){
         for(int k = 0;k < m;k++){
-          ret.matrix[i][j] += this->matrix[i][k] * A.matrix[k][j];
+          ret.matrix[i][j] += this->matrix[i][k] * A_t.matrix[j][k];
         }
       }
     }
     return ret;
   }
 
-  Matrix operator*=(const Matrix &A){
+  Matrix operator*=(Matrix &A){
     int n = this->row;
     int m = this->column;
     int l = A.column;
     if(this->column != A.row){
       Matrix_calc_error(*this,A,"mul");
     }
+    Matrix A_t(A.column,A.row);
     Matrix ret(n,l);
+    A_t = A.t();
     for(int i = 0; i < n;i++){
       for(int j = 0; j < l;j++){
         for(int k = 0; k < m;k++){
-          ret.matrix[i][j] += this->matrix[i][k] * A.matrix[k][j];
+          ret.matrix[i][j] += this->matrix[i][k] * A_t.matrix[j][k];
         }
       }
     }
