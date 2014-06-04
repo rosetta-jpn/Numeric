@@ -221,7 +221,7 @@ class Matrix{
           a += abs(this->matrix[i][j]);
         }
       }
-      if(!(this->matrix[i][i] >= a)){
+      if(!(abs(this->matrix[i][i]) >= a)){
         return false;
       }
     }
