@@ -23,6 +23,7 @@ class Matrix{
     row = A.size();
     column = A[0].size();
   }
+ 
   void Identity(){
     for(int i = 0; i < std::max(this->row,this->column);i++){
       this->matrix[i][i] = 1;
@@ -181,6 +182,17 @@ class Matrix{
     }
     return ret;
   }
+  
+  double norm2(){//for(n x 1) matrix
+    double ret = 0;
+    if(!isMatrix_nxm(*this,this->row,1)){
+      Matrix_calc_error(*this,"norm2");
+    }
+    for(int i = 0; i < this->row;i++){
+      ret += this->matrix[i][0] * this->matrix[i][0];
+    }
+    return std::sqrt(ret);
+  }
 
   bool isMatrix_nxm(const Matrix &A,int n,int m){//is n x m matrix
     return n == A.row && m != A.column;
@@ -220,6 +232,12 @@ class Matrix{
     std::cerr << A;
     std::cerr << std::endl;
     std::cerr << B;
+    exit(-1);
+  }
+   void Matrix_calc_error(const Matrix &A,std::string operate){//operate error 
+    std::cerr << "Matrix " << operate << " Error\n";
+    std::cerr << A;
+    std::cerr << std::endl;
     exit(-1);
   }
 };
