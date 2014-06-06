@@ -33,7 +33,7 @@ class Matrix{
   Matrix operator+(const Matrix &A){
     int n = this->row;
     int m = this->column;
-    if(isMatrix_nxm(A,n,m)){
+    if(!isMatrix_nxm(A,n,m)){
       Matrix_calc_error(*this,A,"sum");
     }
     Matrix ret(n,m);
@@ -48,7 +48,7 @@ class Matrix{
   Matrix& operator+=(const Matrix &A){
     int n = this->row;
     int m = this->column;
-    if(isMatrix_nxm(A,n,m)){
+    if(!isMatrix_nxm(A,n,m)){
       Matrix_calc_error(*this,A,"sum");
     }
     for(int i = 0; i < n ; i++){
@@ -63,7 +63,7 @@ class Matrix{
     int n = this->row;
     int m = this->column;
     Matrix ret(n,m);
-    if(isMatrix_nxm(A,n,m)){
+    if(!isMatrix_nxm(A,n,m)){
       Matrix_calc_error(*this,A,"sub");
     }
     for(int i = 0; i < n ;i++){
@@ -78,7 +78,7 @@ class Matrix{
     int n = this->row;
     int m = this->column;
     Matrix ret(n,m);
-    if(isMatrix_nxm(A,n,m)){
+    if(!isMatrix_nxm(A,n,m)){
       Matrix_calc_error(*this,A,"sub");
     }
     for(int i = 0;i < n;i++){
@@ -108,6 +108,20 @@ class Matrix{
     }
     return ret;
   }
+
+  Matrix operator*(std::vector <double> &b){
+    if(b.size() != this->column){
+      Matrix_calc_error(*this,"vector mul");
+    }
+    Matrix ret(this->row,1);
+    for(int i = 0; i < this->row;i++){
+      for(int j = 0; j < this->column;j++){
+        ret.matrix[i][0] += this->matrix[i][j] * b[j];
+      }
+    }
+    return ret;
+  }
+
 
   Matrix operator*=(Matrix &A){
     int n = this->row;
@@ -157,7 +171,7 @@ class Matrix{
   Matrix operator=(const Matrix &A){
     int n = this->row;
     int m = this->column;
-    if(isMatrix_nxm(A,n,m)){
+    if(!isMatrix_nxm(A,n,m)){
       Matrix_calc_error(*this,A,"substitue");
     }
     for(int i = 0;i < n;i++){
@@ -195,7 +209,7 @@ class Matrix{
   }
 
   bool isMatrix_nxm(const Matrix &A,int n,int m){//is n x m matrix
-    return n == A.row && m != A.column;
+    return n == A.row && m == A.column;
   }
   
   bool isSquare(){
