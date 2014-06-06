@@ -3,15 +3,14 @@
 #include "Matrix.h"
 #include <iostream>
 #include <vector>
-#define CG_EPS 1e-8
+#define CG_EPS 1e-12
 
-bool cg_isfinish(Matrix &r){
-  for(int i = 0 ; i < r.row;i++){
-    if(r.matrix[i][0] > CG_EPS){
-      return false;
-    }
+bool cg_isfinish(Matrix &A,Matrix &x, Matrix &b){
+  if((A * x - b).norm2() <= CG_EPS * b.norm2()){
+    return true;
+  }else{
+    return false;
   }
-  return true;
 }
 
 std::vector <double> ConjugateGradient(Matrix &A,std::vector <double> &_b,bool force){
@@ -20,7 +19,12 @@ std::vector <double> ConjugateGradient(Matrix &A,std::vector <double> &_b,bool f
     std::cerr << A;
     exit(-1);
   }else if(!A.isSymmetric()){
-    std::cerr << "A is not Symmetric\n";
+    if(force){
+      std::cerr << "Warning Matrix is not Symmetric";
+    }else{
+      std::cerr << "Matrix is not Symmetric";
+      exit(-1);
+    }
     std::cerr << A;
     exit(-1);
   }
@@ -42,13 +46,12 @@ std::vector <double> ConjugateGradient(Matrix &A,std::vector <double> &_b,bool f
   Matrix x(A.row,1);//init x is 0
   Matrix r(A.row,1); Matrix r_(A.row,1); // r,r_ swaps
   Matrix p(A.row,1);
-  
-  p = r = b - A*x;
 
+  r = b - (A*x);
+  p = r;
   double alpha;
   double beta;
-
-  while(!cg_isfinish(r)){
+  while(!cg_isfinish(A,x,b)){
     alpha = (r.t() * r).matrix[0][0] / (p.t() * A * p).matrix[0][0];
     r_ = r - (alpha * A * p);
     x = x + alpha * p;
